@@ -19,16 +19,16 @@ It's possible to run LAVA independently, on only selected sumstats, with no need
 > :memo: These scripts load the needed modules, which may need adaptation. 
 
 
-### lava_main_job_loop.sh
+### "lava_main_job_loop.sh"
 This is the master job, the one you need to submit. It will loop the "lava_main_job.sh" through the different trait pairs.
 
-### lava_main_job.sh
+### "lava_main_job.sh"
 This script processes a single phenotype pair (provided by the master job), parallelising over loci chunks the inner loop represented by "lava_script.sh".
 
-### lava_script.sh
+### "lava_script.sh"
 This is the core job, finally running the "lava_script.R" script for each trait pair defined by "lava_main_job_loop.sh" and each locus defined by "lava_main_job.sh". It provides the R script with all the arguments needed to run the analysis on that locus in that specific trait pair.
 
-### lava_script.R
+### "lava_script.R"
 Adapted from Giuseppe's script. It runs the analysis on a loci clump specified in the arguments. command line arguments, specifying input/output file names and phenotype subset.
 >It shouldn't need any adaption. However, you may need to install LAVA on your R the first time if the installation command fails. Check the [GitHub][2] for more.
 
