@@ -1,5 +1,5 @@
 # Local Analysis of [co]Variant Annotation parallelization
-Collection of notes and scripts on how to run LAVA on multiple trait pairs in a HPC cluster. 
+Collection of notes and scripts on how to run LAVA on multiple trait pairs in a SLURM-using HPC cluster. 
 This tool allows the user to estimate local genetic correlation based on GWAS summary statistics and predefined genomic chunks. Check the original [paper][1] and the [GitHub page][2] for more.
 
 Running LAVA
