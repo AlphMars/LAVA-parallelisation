@@ -2,6 +2,10 @@
 Collection of notes and scripts on how to run LAVA on multiple trait pairs in a SLURM-using HPC cluster. 
 This tool allows the user to estimate local genetic correlation based on GWAS summary statistics and predefined genomic chunks. Check the original [paper][1] and the [GitHub page][2] for more.
 
+If you use this repository, pleace cite:
+> Werme, J., van der Sluis, S., Posthuma, D., & de Leeuw, C. A. (2022). An integrated framework for local genetic correlation analysis. Nature Genetics, 54(3), 274–282. <https://doi.org/10.1038/s41588-022-01017-y> 
+
+
 Running LAVA
 -----------------------------------
 It's possible to run LAVA independently, on only selected sumstats, with no need for parallelization. However, I created a slurm job that can be useful in case you need to run LAVA on multiple traits in the most efficient way. These scripts were combine Giuseppe Fanelli's scripts and the original [LAVA cluster setup][3], perfected thanks to Margo Raijmakers, but even like this it took around 27h to process 110 trait pairs. 
