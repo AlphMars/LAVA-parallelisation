@@ -7,7 +7,7 @@
 #SBATCH --output=/path/to/lava/folder/lava_scripts/lava.%A.out 
 #SBATCH --error=/path/to/lava/folder/lava_scripts/lava.%A.err 
 #SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=...
+#SBATCH --mail-user=XXX
 
 module load 2022
 module load R/4.2.1-foss-2022a
