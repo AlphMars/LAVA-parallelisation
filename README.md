@@ -5,39 +5,48 @@ This tool allows the user to estimate local genetic correlation based on GWAS su
 If you use this repository, pleace cite:
 > Werme, J., van der Sluis, S., Posthuma, D., & de Leeuw, C. A. (2022). An integrated framework for local genetic correlation analysis. Nature Genetics, 54(3), 274–282. <https://doi.org/10.1038/s41588-022-01017-y> 
 
+<br>
 
-Running LAVA
+I. Running LAVA
 -----------------------------------
-It's possible to run LAVA independently, on only selected sumstats, with no need for parallelization. However, I created a slurm job that can be useful in case you need to run LAVA on multiple traits in the most efficient way. These scripts were combine Giuseppe Fanelli's scripts and the original [LAVA cluster setup][3], perfected thanks to Margo Raijmakers, but even like this it took around 27h to process 110 trait pairs. 
+It's possible to run LAVA independently, on only selected sumstats, with no need for parallelization. However, I created a slurm job that can be useful in case you need to run LAVA on multiple traits in the most efficient way. These scripts combine Giuseppe Fanelli's scripts and the original [LAVA cluster setup][3], perfected thanks to Margo Raijmakers, but even like this it took around 27h to process 110 trait pairs. 
 
->:memo: Please **note** that these scripts assume the following folder structure:
->
->- "/path/to/lava/folder/" &rarr; folder containing the "lava_pheno_pairs.tsv" file
->- "/path/to/lava/folder/lava_results" &rarr; output folder
->- "/path/to/lava/folder/lava_scripts" &rarr; folder containing the presents scripts
->- "/path/to/ref/loci/loci100files/loci_list_1_100_parallel" &rarr; folder storing the loci chunks
-> - "/path/to/ref_genotype" &rarr; path to folder containing the reference genotype (e.g. "g1000_eur_maf005")
-> 
-> To avoid confusion, I suggest to keep the same structure and to adapt just paths.
+>⚠️ ***Warning**: These scripts assume you have a HPC cluster using SLURM as job scheduler.*
 
-> :memo: These scripts load the needed modules, which may need adaptation. 
+Please **note** that these scripts assume the following folder structure:
+- "/path/to/lava/folder/" &rarr; folder containing the "lava_pheno_pairs.tsv" file
+- "/path/to/lava/folder/lava_results" &rarr; output folder
+- "/path/to/lava/folder/lava_scripts" &rarr; folder containing the presents scripts
+- "/path/to/ref/loci/loci100files/loci_list_1_100_parallel" &rarr; folder storing the loci chunks
+- "/path/to/ref_genotype" &rarr; path to folder containing the reference genotype (e.g. "g1000_eur_maf005")
 
+To avoid confusion, I suggest to keep the same structure and to adapt just paths.
 
-### "lava_main_job_loop.sh"
+<br>
+
+### 1. "lava_main_job_loop.sh"
 This is the master job, the one you need to submit. It will loop the "lava_main_job.sh" through the different trait pairs.
 
-### "lava_main_job.sh"
+<br>
+
+### 2. "lava_main_job.sh"
 This script processes a single phenotype pair (provided by the master job), parallelising over loci chunks the inner loop represented by "lava_script.sh".
 
-### "lava_script.sh"
+<br>
+
+### 3. "lava_script.sh"
 This is the core job, finally running the "lava_script.R" script for each trait pair defined by "lava_main_job_loop.sh" and each locus defined by "lava_main_job.sh". It provides the R script with all the arguments needed to run the analysis on that locus in that specific trait pair.
 
-### "lava_script.R"
+<br>
+
+### 4. "lava_script.R"
 Adapted from Giuseppe's script. It runs the analysis on a loci clump specified in the arguments. command line arguments, specifying input/output file names and phenotype subset.
 >It shouldn't need any adaption. However, you may need to install LAVA on your R the first time if the installation command fails. Check the [GitHub][2] for more.
 
-### Needed files
-#### Sumamry statistics    
+<br>
+
+### 5. Needed files
+#### A. Sumamry statistics    
 - Requested columns:
   - SNP / ID / SNPID_UKB/ SNPID / MarkerName / RSID / RSID_UKB
   - A1 / ALT: effect allele
@@ -47,7 +56,7 @@ Adapted from Giuseppe's script. It runs the analysis on a loci clump specified i
 
 The qc steps recommended are the same you run, for example, for GenomicSEM. However, you do need to extract the needed columns.
 
-#### Other input files
+#### B. Other input files
 - **lava_input_infos.tsv** : File summarising the info of the included traits in the following format:
 
         phenotype	cases	controls	filename
@@ -92,26 +101,29 @@ for (i in names(splits)) {
 ls locfile* > /path/to/ref_loci/loci100files/loci_list_1_100_parallel
 ```
 
+<br>
 
-Results extraction
+II. Results extraction
 ------------------------------------
-### lava_extract_data.sh
+### 1. lava_extract_data.sh
 Creates the input files from LAVA results and calls "lava_extract_data_significant.R" on these.
 It's also possible to select a subset of files.
 
-### lava_extract_data_significant.R
+### 2. lava_extract_data_significant.R
 R script to extract FDR/Bonferroni significant results. It also creates bed files that can be used for example with loci2path analyses.
 
-Extract GWAS chunks
+<br>
+
+III. Extract GWAS chunks
 ------------------------------------
 Subset the GWAS summary statistics based on the chunks used in LAVA. These can be used for colocalization and fine-mapping analyses (e.g. mvSuSiE).
-### gwas_chunks_extraction.sh
+### 1. gwas_chunks_extraction.sh
 Adapt modules and settings as needed.
 
-### gwas_chunks_extraction.R
+### 2. gwas_chunks_extraction.R
 Adapt as needed (paths and traits).
 
-### Needed files
+### 3. Needed files
 - **all_pheno_pairs.all_loci.results.bivar.lava.fdr_sign.uniq**: list of all loci significant for each trait from LAVA bivariate analyses
 
         locus   chr     start   end     phenotype
