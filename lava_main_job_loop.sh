@@ -7,7 +7,7 @@
 #SBATCH --output=/path/to/lava/folder/lava_scripts/lava.%A.out 
 #SBATCH --error=/path/to/lava/folder/lava_scripts/lava.%A.err 
 #SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=alfonso.martone@radboudumc.nl
+#SBATCH --mail-user=XXX
 
 echo "----------------------------------------------------"
 echo "Slurm Job ID: $SLURM_JOB_ID"
